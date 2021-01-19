@@ -3,7 +3,7 @@
 
 import findspark
 
-findspark.init('/home/ibra/spark-3.0.1-bin-hadoop2.7')
+findspark.init()
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import (concat, col)
