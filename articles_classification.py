@@ -38,28 +38,28 @@ regex_tokenizer = RegexTokenizer(pattern='\\W',
                                  inputCol='article',
                                  outputCol='words')
 # apply tokenization
-words = regex_tokenizer.transform(data_combined)
+words = regex_tokenizer.transform(data_combined).drop('article')
 words.show()
 # stopword remover object
 remover = StopWordsRemover(inputCol='words', outputCol='filtered')
 # appply remove stopwords
-filtered_words = remover.transform(words)
+filtered_words = remover.transform(words).drop('words')
 filtered_words.show()
 # defining an HashingTF object
 hashingTF = HashingTF(inputCol='filtered', outputCol='tf')
 # transform the words into vectors
-tf = hashingTF.transform(filtered_words)
+tf = hashingTF.transform(filtered_words).drop('filtered')
 
 # the output column is the features which is tf-idf vector
 idf = IDF(inputCol='tf', outputCol='features')
 idf_model = idf.fit(tf)
 # transforming the data into TF-IDF vectors
-tf_idf = idf_model.transform(tf)
+tf_idf = idf_model.transform(tf).drop('tf')
 
 # class (Category) into number conversion
 category_numeric = StringIndexer(inputCol='Category', outputCol='label')
 ready_data = category_numeric.fit(tf_idf) \
-    .transform(tf_idf)
+    .transform(tf_idf).drop('category')
 
 # can select only features and label columns only
 # ready_data = ready_data.select(['label', 'features'])
